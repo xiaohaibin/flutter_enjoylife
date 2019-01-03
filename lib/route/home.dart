@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lexiang/widget/tabWidget.dart';
+
+//import 'package:lexiang/widget/tabWidget.dart';
 import 'package:http/http.dart' as client;
+import 'package:lexiang/model/tuchong_response.dart';
+import 'dart:convert';
+import 'package:lexiang/widget/tabWidget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,10 +20,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  List<FeedList> feedList = new List();
+
+  @override
+  void initState() {
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    getData();
-    return TabbedScaffold(title: '乐享');
+    return TabbedScaffold('乐享', feedList);
   }
 
   getData() async {
@@ -27,7 +37,14 @@ class MyHomePageState extends State<MyHomePage> {
     try {
       final response = await client.get(api);
       if (response.statusCode == 200) {
-          print(response.body);
+        print(response.body);
+        TuchongRespon tuchongRespon =
+            TuchongRespon.fromJson(json.decode(response.body));
+        setState(() {
+          feedList.addAll(tuchongRespon.feedList);
+        });
+      } else {
+        throw new Exception("http error:" + response.statusCode.toString());
       }
     } catch (e) {
       print(e);

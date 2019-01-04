@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as client;
 import 'package:lexiang/model/tuchong_response.dart';
 import 'package:lexiang/widget/drawerWidget.dart';
-import 'package:lexiang/http/HttpController.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -71,7 +70,7 @@ class MyHomePageState extends State<MyHomePage> {
       if (response.statusCode == 200) {
         print(response.body);
         TuchongRespon tuchongRespon =
-        TuchongRespon.fromJson(json.decode(response.body));
+            TuchongRespon.fromJson(json.decode(response.body));
         setState(() {
           feedList.addAll(tuchongRespon.feedList);
         });

@@ -10,7 +10,6 @@ class DrawerWidget extends StatelessWidget {
       child: new ListView(
         padding: EdgeInsets.all(0.0),
         children: <Widget>[
-//          new MyDrawerHeader(),
           new UserAccountsDrawerHeader(
             accountName: new Text('MR.Xiao'),
             accountEmail: new Text('xhb_199409@163.com'),
@@ -33,7 +32,7 @@ class DrawerWidget extends StatelessWidget {
           ),
           new ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            title: const Text('设置'),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context, new MaterialPageRoute(
@@ -46,7 +45,7 @@ class DrawerWidget extends StatelessWidget {
           new Divider(),
           new ListTile(
             leading: const Icon(Icons.info),
-            title: const Text('About'),
+            title: const Text('关于'),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context, new MaterialPageRoute(

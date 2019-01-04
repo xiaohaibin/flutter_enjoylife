@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'drawerWidget.dart';
 import 'package:lexiang/model/tuchong_response.dart';
@@ -17,22 +16,14 @@ class TabbedScaffold extends StatelessWidget {
         title: new Text(title),
       ),
       drawer: new DrawerWidget(),
-      body: new ListView.builder(
-            itemCount: items == null ? 0 : items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              List<Images> imageList = item.images;
-              if (imageList.isNotEmpty) {
-                Images image = imageList[0];
-                final url = "https://photo.tuchong.com/" +
-                    image.userId.toString() +
-                    "/f/" +
-                    image.imgId.toString() +
-                    ".jpg";
-                return getImage(context, url);
-              }
-            },
-          ),
+      body: new GridView.count(
+        primary: false,
+        padding: const EdgeInsets.all(8.0),
+        crossAxisCount: 2,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        children: buildGridTileList(context, items),
+      ),
     );
   }
 }
@@ -43,7 +34,26 @@ getImage(BuildContext context, String imgUrl) {
     imageUrl: imgUrl,
     errorWidget: new Icon(Icons.error),
     fit: BoxFit.cover,
-    height: MediaQuery.of(context).size.width,
-    width: MediaQuery.of(context).size.width,
+    height: MediaQuery.of(context).size.width / 2,
+    width: MediaQuery.of(context).size.width / 2,
   );
+}
+
+List<Widget> buildGridTileList(BuildContext context, List<FeedList> items) {
+  List<Widget> widgetList = new List();
+  var length = items==null?0:items.length;
+  for (int index = 0; index < length; index++) {
+    FeedList item = items[index];
+    List<Images> imageList = item.images;
+    if (imageList.isNotEmpty) {
+      Images image = imageList[0];
+      String url = "https://photo.tuchong.com/" +
+          image.userId.toString() +
+          "/f/" +
+          image.imgId.toString() +
+          ".jpg";
+      widgetList.add(getImage(context, url));
+    }
+    return widgetList;
+  }
 }

@@ -11,11 +11,11 @@ class About extends StatefulWidget {
 }
 
 class AboutState extends State<About> {
-  static const platform = const MethodChannel('com.eajy.flutterdemo/android');
+  static const platform = const MethodChannel('com.xhb.flutterapp/android');
 
   static const app_url =
-      'https://play.google.com/store/apps/details?id=com.eajy.flutterdemo';
-  static const github_url = 'https://github.com/Eajy/flutter_demo';
+      'https://github.com/xiaohaibin';
+  static const github_url = 'https://github.com/xiaohaibin';
   static const me_url = 'https://sites.google.com/view/eajy';
 
   String _version = 'Version:';
@@ -101,7 +101,7 @@ class AboutState extends State<About> {
               color: Colors.transparent,
             ),
             title: new Text(
-              'Designed by Eajy in China.',
+              'Designed by jxnk25 in China.',
               style: new TextStyle(color: Colors.black54, fontSize: 14.0),
             ),
           ),

@@ -21,13 +21,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  dynamic type = '';
+  int page = 1;
+  int posId = 0;
+  final ScrollController _scrollController = new ScrollController();
   List<FeedList> feedList = new List();
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     getData();
+    _scrollController.addListener(() {
+      ///判断当前滑动位置是不是到达底部，触发加载更多回调
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        type = 'loadmore';
+        getData();
+      }
+    });
   }
 
   @override
@@ -68,6 +81,9 @@ class MyHomePageState extends State<MyHomePage> {
     try {
       final response = await client.get(api);
       if (response.statusCode == 200) {
+        if (type == 'refresh') {
+          feedList = [];
+        }
         print(response.body);
         TuchongRespon tuchongRespon =
             TuchongRespon.fromJson(json.decode(response.body));
@@ -82,27 +98,15 @@ class MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<Null> handleRefresh() async {
-    final Completer<Null> completer = new Completer<Null>();
-    var api = 'https://api.tuchong.com/feed-app';
-    try {
-      final response = await client.get(api);
-      if (response.statusCode == 200) {
-        completer.complete(null);
-        print(response.body);
-        TuchongRespon tuchongRespon =
-            TuchongRespon.fromJson(json.decode(response.body));
-        setState(() {
-          feedList.clear();
-          feedList.addAll(tuchongRespon.feedList);
-        });
-      } else {
-        completer.completeError(null);
-        throw new Exception("http error:" + response.statusCode.toString());
-      }
-    } catch (e) {
-      print(e);
-    }
+  Future<void> handleRefresh() async {
+    final Completer<void> completer = new Completer<void>();
+    Timer(const Duration(seconds: 1), () {
+      completer.complete();
+    });
+    return completer.future.then<void>((_) {
+      type = 'refresh';
+      getData();
+    });
   }
 }
 

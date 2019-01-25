@@ -22,6 +22,8 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> {
   dynamic type = '';
+  bool isLoading = false; // 是否正在请求数据中
+  bool _hasMore = true; // 是否还有更多数据可加载
   int page = 1;
   int posId = 0;
   final ScrollController _scrollController = new ScrollController();
@@ -54,6 +56,7 @@ class MyHomePageState extends State<MyHomePage> {
             color: Colors.blue,
             key: _refreshIndicatorKey,
             child: new GridView.builder(
+                controller: _scrollController, //用于监听是否滑到最底部
                 gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 8.0,
@@ -108,11 +111,51 @@ class MyHomePageState extends State<MyHomePage> {
       getData();
     });
   }
+
+  /*
+  * 上提加载loading的widget
+  * */
+  Widget _buildProgressIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Center(
+          child: Column(
+        children: <Widget>[
+          new Opacity(
+            opacity: 1.0,
+            child: new CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.blue)),
+          ),
+          SizedBox(height: 20.0),
+          Text(
+            '稍等片刻更精彩...',
+            style: TextStyle(fontSize: 14.0),
+          )
+        ],
+      )
+          //child:
+          ),
+    );
+  }
+
+/*
+  * 加载中的提示
+  * */
+  Widget _buildLoadText() {
+    return Container(
+        child: Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Center(
+        child: Text("数据没有更多了！！！"),
+      ),
+    ));
+  }
 }
 
 //列表中图片加载
 getImage(BuildContext context, String imgUrl) {
   return new CachedNetworkImage(
+//    fadeInDuration: const Duration(seconds: 300),
     imageUrl: imgUrl,
     errorWidget: new Icon(Icons.error),
     fit: BoxFit.cover,

@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as client;
 import 'package:lexiang/model/tuchong_response.dart';
 import 'package:lexiang/widget/drawerWidget.dart';
+import 'package:lexiang/http/HttpController.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,11 +21,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  dynamic type = '';
+  dynamic type = 'refresh';
   bool isLoading = false; // 是否正在请求数据中
   bool _hasMore = true; // 是否还有更多数据可加载
-  int page = 1;
-  int posId = 0;
+  dynamic page = 1;
+  dynamic posId = 0;
   final ScrollController _scrollController = new ScrollController();
   List<FeedList> feedList = new List();
 
@@ -39,6 +39,7 @@ class MyHomePageState extends State<MyHomePage> {
       ///判断当前滑动位置是不是到达底部，触发加载更多回调
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
+        page++;
         type = 'loadmore';
         getData();
       }
@@ -63,42 +64,47 @@ class MyHomePageState extends State<MyHomePage> {
                   crossAxisSpacing: 8.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  FeedList item = feedList[index];
-                  List<Images> imageList = item.images;
-                  if (imageList.isNotEmpty) {
-                    Images image = imageList[0];
-                    String url = "https://photo.tuchong.com/" +
-                        image.userId.toString() +
-                        "/f/" +
-                        image.imgId.toString() +
-                        ".jpg";
-                    return getImage(context, url);
+                  if (index < feedList.length) {
+                    FeedList item = feedList[index];
+                    List<Images> imageList = item.images;
+                    if (imageList.isNotEmpty) {
+                      Images image = imageList[0];
+                      String url = "https://photo.tuchong.com/" +
+                          image.userId.toString() +
+                          "/f/" +
+                          image.imgId.toString() +
+                          ".jpg";
+                      return getImage(context, url);
+                    }
+                  } else {
+                    return _buildProgressIndicator(); //展示加载loading框
                   }
                 },
-                itemCount: feedList.length),
+                itemCount: feedList.length + 1),
             onRefresh: handleRefresh));
   }
 
   getData() async {
     var api = 'https://api.tuchong.com/feed-app';
-    try {
-      final response = await client.get(api);
-      if (response.statusCode == 200) {
+    Map<String, String> map = new Map();
+    print(page.toString());
+    map["page"] = page.toString();
+    map["type"] = type;
+    if (posId != 0) {
+      map["post_id"] = posId.toString();
+    }
+    HttpController.get(api, params: map).then((data) {
+      print(data);
+      TuchongRespon tuchongRespon = TuchongRespon.fromJson(json.decode(data));
+      setState(() {
         if (type == 'refresh') {
           feedList = [];
         }
-        print(response.body);
-        TuchongRespon tuchongRespon =
-            TuchongRespon.fromJson(json.decode(response.body));
-        setState(() {
-          feedList.addAll(tuchongRespon.feedList);
-        });
-      } else {
-        throw new Exception("http error:" + response.statusCode.toString());
-      }
-    } catch (e) {
-      print(e);
-    }
+        feedList.addAll(tuchongRespon.feedList);
+        posId =
+            tuchongRespon.feedList[tuchongRespon.feedList.length - 1].postId;
+      });
+    });
   }
 
   Future<void> handleRefresh() async {
@@ -107,6 +113,7 @@ class MyHomePageState extends State<MyHomePage> {
       completer.complete();
     });
     return completer.future.then<void>((_) {
+      page = 1;
       type = 'refresh';
       getData();
     });
@@ -136,19 +143,6 @@ class MyHomePageState extends State<MyHomePage> {
           //child:
           ),
     );
-  }
-
-/*
-  * 加载中的提示
-  * */
-  Widget _buildLoadText() {
-    return Container(
-        child: Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Center(
-        child: Text("数据没有更多了！！！"),
-      ),
-    ));
   }
 }
 

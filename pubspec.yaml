@@ -25,6 +25,7 @@ dependencies:
   fluttertoast: ^2.2.3
   json_annotation: ^0.2.3
   cached_network_image: ^0.4.1
+  connectivity: ^0.3.2
 
 dev_dependencies:
 

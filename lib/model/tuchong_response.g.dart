@@ -185,7 +185,7 @@ abstract class _$ImagesSerializerMixin {
 
 Site _$SiteFromJson(Map<String, dynamic> json) {
   return new Site(
-      json['site_id'] as String,
+//      json['site_id'] as String,
       json['type'] as String,
       json['name'] as String,
       json['domain'] as String,
@@ -202,7 +202,7 @@ Site _$SiteFromJson(Map<String, dynamic> json) {
 }
 
 abstract class _$SiteSerializerMixin {
-  String get siteId;
+//  String get siteId;
   String get type;
   String get name;
   String get domain;
@@ -217,7 +217,7 @@ abstract class _$SiteSerializerMixin {
   List<dynamic> get verificationList;
   bool get isFollowing;
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'site_id': siteId,
+//        'site_id': siteId,
         'type': type,
         'name': name,
         'domain': domain,

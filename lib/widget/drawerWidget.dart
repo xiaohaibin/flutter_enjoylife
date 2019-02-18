@@ -18,31 +18,31 @@ class DrawerWidget extends StatelessWidget {
               child: new FlutterLogo(size: 42.0),
             ),
           ),
-          new ListTile(
-            leading: const Icon(Icons.vertical_align_top),
-            title: const Text('Sliver Appbar'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, new MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return new ContactsDemo();
-                },
-              ));
-            },
-          ),
-          new ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('设置'),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, new MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return new Settings();
-                },
-              ));
-            },
-          ),
-          new Divider(),
+//          new ListTile(
+//            leading: const Icon(Icons.vertical_align_top),
+//            title: const Text('Sliver Appbar'),
+//            onTap: () {
+//              Navigator.pop(context);
+//              Navigator.push(context, new MaterialPageRoute<void>(
+//                builder: (BuildContext context) {
+//                  return new ContactsDemo();
+//                },
+//              ));
+//            },
+//          ),
+//          new ListTile(
+//            leading: const Icon(Icons.settings),
+//            title: const Text('设置'),
+//            onTap: () {
+//              Navigator.pop(context);
+//              Navigator.push(context, new MaterialPageRoute(
+//                builder: (BuildContext context) {
+//                  return new Settings();
+//                },
+//              ));
+//            },
+//          ),
+//          new Divider(),
           new ListTile(
             leading: const Icon(Icons.info),
             title: const Text('关于'),

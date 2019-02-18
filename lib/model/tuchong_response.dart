@@ -218,8 +218,8 @@ class Images extends Object with _$ImagesSerializerMixin {
 
 @JsonSerializable()
 class Site extends Object with _$SiteSerializerMixin {
-  @JsonKey(name: 'site_id')
-  String siteId;
+//  @JsonKey(name: 'site_id')
+//  String siteId;
 
   @JsonKey(name: 'type')
   String type;
@@ -261,7 +261,7 @@ class Site extends Object with _$SiteSerializerMixin {
   bool isFollowing;
 
   Site(
-    this.siteId,
+//    this.siteId,
     this.type,
     this.name,
     this.domain,

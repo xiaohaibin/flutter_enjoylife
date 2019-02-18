@@ -18,7 +18,7 @@ class AboutState extends State<About> {
   static const github_url = 'https://github.com/xiaohaibin';
   static const me_url = 'https://sites.google.com/view/eajy';
 
-  String _version = 'Version:';
+  String _version = 'Version:1.0';
 
   Future<Null> _getVersionName() async {
     try {
@@ -56,7 +56,7 @@ class AboutState extends State<About> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('About'),
+        title: new Text('关于'),
       ),
       body: new ListView(
         children: <Widget>[

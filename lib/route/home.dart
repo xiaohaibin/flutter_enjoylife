@@ -84,14 +84,15 @@ class MyHomePageState extends State<MyHomePage> {
             onRefresh: handleRefresh));
   }
 
-  getData() async {
+  getData() {
     var api = 'https://api.tuchong.com/feed-app';
     Map<String, String> map = new Map();
-    print(page.toString());
     map["page"] = page.toString();
     map["type"] = type;
     if (posId != 0) {
       map["post_id"] = posId.toString();
+      print("==post_id" + posId.toString());
+      print("==page" + page.toString());
     }
     HttpController.get(api, params: map).then((data) {
       print(data);
@@ -107,7 +108,7 @@ class MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> handleRefresh() async {
+  Future<void> handleRefresh() {
     final Completer<void> completer = new Completer<void>();
     Timer(const Duration(seconds: 1), () {
       completer.complete();
@@ -115,6 +116,7 @@ class MyHomePageState extends State<MyHomePage> {
     return completer.future.then<void>((_) {
       page = 1;
       type = 'refresh';
+      posId = 0;
       getData();
     });
   }
@@ -135,7 +137,7 @@ class MyHomePageState extends State<MyHomePage> {
           ),
           SizedBox(height: 20.0),
           Text(
-            '稍等片刻更精彩...',
+            '加载中...',
             style: TextStyle(fontSize: 14.0),
           )
         ],

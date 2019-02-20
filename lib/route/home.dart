@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lexiang/model/tuchong_response.dart';
@@ -64,12 +64,13 @@ class MyHomePageState extends State<MyHomePage> {
                   crossAxisSpacing: 8.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
+                  String url;
                   if (index < feedList.length) {
                     FeedList item = feedList[index];
                     List<Images> imageList = item.images;
                     if (imageList.isNotEmpty) {
                       Images image = imageList[0];
-                      String url = "https://photo.tuchong.com/" +
+                      url = "https://photo.tuchong.com/" +
                           image.userId.toString() +
                           "/f/" +
                           image.imgId.toString() +
@@ -150,12 +151,24 @@ class MyHomePageState extends State<MyHomePage> {
 
 //列表中图片加载
 getImage(BuildContext context, String imgUrl) {
-  return new CachedNetworkImage(
+  return new GestureDetector(
+      onTap: () {
+        Navigator.push(context, new MaterialPageRoute(builder: (context) {
+          return new CachedNetworkImage(
+            imageUrl: imgUrl,
+            errorWidget: new Icon(Icons.error),
+            fit: BoxFit.fill,
+            height: MediaQuery.of(context).size.width / 2,
+            width: MediaQuery.of(context).size.width / 2,
+          );
+        }));
+      },
+      child: new CachedNetworkImage(
 //    fadeInDuration: const Duration(seconds: 300),
-    imageUrl: imgUrl,
-    errorWidget: new Icon(Icons.error),
-    fit: BoxFit.cover,
-    height: MediaQuery.of(context).size.width / 2,
-    width: MediaQuery.of(context).size.width / 2,
-  );
+        imageUrl: imgUrl,
+        errorWidget: new Icon(Icons.error),
+        fit: BoxFit.cover,
+        height: MediaQuery.of(context).size.width / 2,
+        width: MediaQuery.of(context).size.width / 2,
+      ));
 }

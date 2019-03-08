@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lexiang/model/tuchong_response.dart';
@@ -157,7 +156,7 @@ getImage(BuildContext context, String imgUrl) {
           return new CachedNetworkImage(
             imageUrl: imgUrl,
             errorWidget: new Icon(Icons.error),
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             height: MediaQuery.of(context).size.width / 2,
             width: MediaQuery.of(context).size.width / 2,
           );
